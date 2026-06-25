@@ -2,9 +2,7 @@ import { listings } from "../data/listings";
 export default function ListingsTable(){
   return(
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="px-5 py-4 border-b border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-800">Recent Listings</h3>
-      </div>
+      
       <div className="overflow-x-auto">
         <table className="w-full min-w-[700px]">
           <thead>
