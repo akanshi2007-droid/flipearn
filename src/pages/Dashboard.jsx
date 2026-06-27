@@ -1,4 +1,4 @@
-import {
+import{
   TrendingUp,
   DollarSign,
   AlignJustify,
@@ -18,11 +18,10 @@ const stats = [
 export default function Dashboard() {
   return (
     <main className="flex-1 min-h-screen bg-gray-50 p-4 md:p-8">
-      
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800">
           Admin{" "}
-          <span className="text-violet-500">
+          <span className="text-violet-500 underline">
             Dashboard
           </span>
         </h1>
@@ -38,10 +37,8 @@ export default function Dashboard() {
         <h2 className="text-lg font-semibold text-gray-800 mb-4">
           Recent Listings
         </h2>
-
         <ListingsTable />
       </div>
-
     </main>
   );
 }
