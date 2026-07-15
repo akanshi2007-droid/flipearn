@@ -12,7 +12,8 @@ These are aggregate queries — they look at ALL records in the database
 and return counts and sums, not individual rows.
 
 Endpoints:
-  GET /api/dashboard/stats  — returns all summary numbers (admin only)
+  GET /api/dashboard/stats        — returns all summary numbers (admin only)
+  GET /api/dashboard/public-stats — returns basic counts (no login needed, for the frontend)
 """
 
 from fastapi import APIRouter, Depends
@@ -78,6 +79,32 @@ def get_dashboard_stats(
         total_revenue       = round(total_revenue, 2),
         pending_withdrawals = pending_withdrawals,
     )
+
+
+@router.get("/public-stats")
+def get_public_stats(db: Session = Depends(get_db)):
+    """
+    PUBLIC DASHBOARD STATS — no login required.
+
+    Returns the 4 numbers shown on the admin dashboard cards.
+    Safe to call from the frontend without a token.
+    Revenue is hidden from this endpoint (admin-only info).
+    """
+    total_listings  = db.query(func.count(models.Listing.id)).scalar()
+    active_listings = db.query(func.count(models.Listing.id)).filter(
+        models.Listing.status == models.ListingStatus.active
+    ).scalar()
+    total_users  = db.query(func.count(models.User.id)).scalar()
+    total_revenue = db.query(func.sum(models.Transaction.amount)).filter(
+        models.Transaction.status == models.TransactionStatus.completed
+    ).scalar() or 0.0
+
+    return {
+        "total_listings":  total_listings,
+        "active_listings": active_listings,
+        "total_users":     total_users,
+        "total_revenue":   round(total_revenue, 2),
+    }
 
 
 # Shortcuts to avoid importing through models
